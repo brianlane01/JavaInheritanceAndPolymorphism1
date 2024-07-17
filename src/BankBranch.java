@@ -13,6 +13,11 @@ public class BankBranch {
         this.branchAddress = branchAddress;
         this.branchAccounts = new ArrayList<>();  // Initialize the accounts list
     }
+	
+	public void addAccount(Account account) {
+        branchAccounts.add(account);
+        account.setBranchName(this);
+    }
 
 	/**
 	 * @return the branchName
@@ -56,6 +61,23 @@ public class BankBranch {
 		this.branchAccounts = branchAccounts;
 	}
 	
+	@Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        output.append("----------------------------------\n");
+        output.append("Branch Information\n");
+        output.append("----------------------------------\n");
+        output.append("Branch Name: ").append(this.branchName).append("\n");
+        output.append("Branch Address: ").append(this.branchAddress).append("\n");
+        output.append("Accounts:\n");
+
+        for (Account account : branchAccounts) {
+            output.append(account.toString()).append("\n");
+        }
+
+        output.append("----------------------------------");
+        return output.toString();
+    }
 	
 }
 
