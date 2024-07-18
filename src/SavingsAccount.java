@@ -55,6 +55,9 @@ public class SavingsAccount extends Account {
 		return getBalance() * (interestRate / 100); 
 	}
 	
+	/*
+	 * 
+	 
 	public String toString() {
         String output = super.toString();
         output += "\nType of Account: " + this.typeOfAccount;
@@ -62,5 +65,6 @@ public class SavingsAccount extends Account {
         output += "\n-------------------------------------------------";
         return output;
     }
+    */
 	
 }

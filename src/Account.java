@@ -17,6 +17,10 @@ public class Account {
 	
 	private BankBranch branchName;
 	
+	String BLUE_TEXT = "\u001B[34m";
+	String BLACK_BG = "\u001B[40m";
+	String RESET = "\u001B[0m";
+	
 	public Account( ) {
 		this.accountNumber = 0; 
 		this.balance = 0.0d;
@@ -133,16 +137,72 @@ public class Account {
 	
 	@Override
     public String toString() {
-        String output = "----------------------------------\n";
-        output += "Account Information\n";
-        output += "----------------------------------\n";
-        output += "Account Number: " + this.accountNumber + "\n";
-        output += "Balance: $" + String.format("%.2f", this.balance) + "\n";
-        output += "Date Opened: " + this.dateOpened + "\n";
-        output += "Branch: " + (branchName != null ? branchName.getBranchName() : "N/A") + "\n";
-        output += "Customer: " + (accountOwner != null ? accountOwner.getName() : "N/A") + "\n";
-        output += "----------------------------------";
+		StringBuilder output = new StringBuilder();
+		
+		output.append(BLUE_TEXT).append(BLACK_BG);
+		
+        output.append("|-----------------------------------------------|\n");
+        output.append(formatLine("|                                          "));
+	    output.append("\n");
+	    output.append(formatLine("|           Account Information"));
+	    output.append("\n");
+	    output.append(formatLine("|                                          "));
+	    output.append("\n");
+	    if (this instanceof SavingsAccount) {
+            SavingsAccount savings = (SavingsAccount) this;
+            output.append(formatLine("|        Type of Account: " + savings.getTypeOfAccount()));
+            output.append("\n");
+        } else if (this instanceof CheckingAccount) {
+            CheckingAccount checking = (CheckingAccount) this;
+            output.append(formatLine("|        Type of Account: " + checking.getTypeOfAccount()));
+            output.append("\n");   
+        }
+	    
+	    output.append(formatLine("|                                          "));
+	    output.append("\n");
+	    output.append("|-----------------------------------------------|");
+	    output.append("\n");
+	    output.append(formatLine("|                                          "));
+	    output.append("\n");
+	    output.append(formatLine("|    Account Owner: " + (this.getAccountOwner() != null ? this.getAccountOwner().getName() : "N/A")));
+        output.append("\n");
+        
+	    output.append(formatLine("|    Account Number: " + this.getAccountNumber()));
+        output.append("\n");
+        output.append(formatLine("|    Balance: $" + String.format("%.2f", this.getBalance())));
+        output.append("\n");
+        output.append(formatLine("|    Date Opened: " + this.getDateOpened()));
+        output.append("\n");
+        output.append(formatLine("|    Branch: " + (this.getBranchName() != null ? this.getBranchName().getBranchName() : "N/A")));
+        output.append("\n");
+	    
+        if (this instanceof SavingsAccount) {
+            SavingsAccount savings = (SavingsAccount) this;
+            output.append(formatLine("|    Interest Rate: " + String.format("%.2f%%", savings.getInterestRate())));
+            output.append("\n");
+            output.append(formatLine("|                                          "));
+    	    output.append("\n");
+    	    output.append("|-----------------------------------------------|");
+    	    output.append("\n");
+        } else if (this instanceof CheckingAccount) {
+            CheckingAccount checking = (CheckingAccount) this;
+            output.append(formatLine("|    Check Style: " + checking.getCheckStyle()));
+            output.append("\n");
+            output.append(formatLine("|    Minimum Balance: $" + String.format("%.2f", (double) checking.getMinimumBalance())));
+            output.append("\n"); 
+            output.append(formatLine("|                                          "));
+    	    output.append("\n");
+    	    output.append("|-----------------------------------------------|");
+    	    output.append("\n");
+        }
        
-        return output;
+        output.append(RESET);
+        
+        return output.toString();
+	}
+	
+	private String formatLine(String content) {
+	    int LINE_WIDTH = 47; // Adjust the width as needed
+	    return String.format("%-" + LINE_WIDTH + "s |", content);
 	}
 }

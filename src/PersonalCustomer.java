@@ -1,11 +1,13 @@
 
 public class PersonalCustomer extends Customer{
 	
+	private String typeOfCustomer;
 	private String homePhone;
 	private String workPhone; 
 	
 	public PersonalCustomer ( ) {
 		super();
+		this.typeOfCustomer = "Personal";
 		this.homePhone = "";
 		this.workPhone = "";
 		
@@ -20,9 +22,18 @@ public class PersonalCustomer extends Customer{
 	 */
 	public PersonalCustomer(String name, String address, String phone, String homePhone, String workPhone) {
 		super(name, address, phone);
+		this.typeOfCustomer = "Personal";
 		this.homePhone = homePhone;
 		this.workPhone = workPhone;
 	}
+
+	/**
+	 * @return the typeOfCustomer
+	 */
+	public String getTypeOfCustomer() {
+		return typeOfCustomer;
+	}
+
 
 	/**
 	 * @return the homePhone
@@ -36,6 +47,13 @@ public class PersonalCustomer extends Customer{
 	 */
 	public String getWorkPhone() {
 		return workPhone;
+	}
+	
+	/**
+	 * @param typeOfCustomer the typeOfCustomer to set
+	 */
+	public void setTypeOfCustomer(String typeOfCustomer) {
+		this.typeOfCustomer = typeOfCustomer;
 	}
 
 	/**
@@ -52,7 +70,9 @@ public class PersonalCustomer extends Customer{
 		this.workPhone = workPhone;
 	}
 	
-	@Override
+	/*
+	 * @Override
+	 
     public String toString() {
         StringBuilder output = new StringBuilder(super.toString());
         output.append("\nHome Phone: ").append(this.homePhone);
@@ -68,4 +88,5 @@ public class PersonalCustomer extends Customer{
 
         return output.toString();
     }
+    */
 }

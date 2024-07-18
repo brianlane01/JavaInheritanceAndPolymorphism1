@@ -70,6 +70,9 @@ public class CheckingAccount extends Account {
 		this.minimumBalance = minimumBalance;
 	}
 	
+	
+	/*
+	 * 
 	@Override
 	public String toString() {
         String output = super.toString();
@@ -80,5 +83,5 @@ public class CheckingAccount extends Account {
         output += "\n----------------------------------------------------";
         return output;
     }
-	
+	*/
 }

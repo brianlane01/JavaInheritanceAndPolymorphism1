@@ -1,6 +1,8 @@
 
 public class CommercialCustomer extends Customer {
 	
+	private String typeOfCustomer;
+	
 	private int creditRating;
 	
 	private String contactPerson; 
@@ -10,6 +12,7 @@ public class CommercialCustomer extends Customer {
 	//The default constructor 
 	public CommercialCustomer () {
 		super();
+		this.typeOfCustomer = "Commercial";
 		this.creditRating = 0; 
 		this.contactPerson = "";
 		this.contactPersonPhone = "";
@@ -18,11 +21,19 @@ public class CommercialCustomer extends Customer {
 	
 	public CommercialCustomer(String name, String address, String phone, int creditRating, String contactPerson, String contactPersonPhone) {
 		super(name, address, phone);
+		this.typeOfCustomer = "Commercial";
 		this.creditRating = creditRating; 
 		this.contactPerson = contactPerson; 
 		this.contactPersonPhone = contactPersonPhone; 
 	}
-
+	
+	/**
+	 * @return the typeOfCustomer
+	 */
+	public String getTypeOfCustomer() {
+		return typeOfCustomer;
+	}
+	
 	/**
 	 * @return the creditRating
 	 */
@@ -64,8 +75,18 @@ public class CommercialCustomer extends Customer {
 	public void setContactPersonPhone(String contactPersonPhone) {
 		this.contactPersonPhone = contactPersonPhone;
 	}
+
+	/**
+	 * @param typeOfCustomer the typeOfCustomer to set
+	 */
+	public void setTypeOfCustomer(String typeOfCustomer) {
+		this.typeOfCustomer = typeOfCustomer;
+	}
 	
-	@Override
+	
+	
+	/*
+	 * @Override
 	public String toString() {
 	    StringBuilder output = new StringBuilder(super.toString());
 	    output.append("\nCredit Rating: ").append(this.creditRating);
@@ -79,4 +100,5 @@ public class CommercialCustomer extends Customer {
         output.append("\n\n");
 	    return output.toString();
 	}
+	*/
 }
