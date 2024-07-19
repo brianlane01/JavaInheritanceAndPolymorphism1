@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Date;
+import java.util.InputMismatchException;
 
 public class Bank {
 	
@@ -156,7 +157,7 @@ public class Bank {
         			manageAccounts();
         			break; 
         		case 3: 
-        			displayBankBranches();
+        			manageBankBranches();
         			pressAnyKey();
         			break;
         		case 4:
@@ -244,6 +245,7 @@ public class Bank {
         while (finished == false) {
         	
         	// Display a menu for the user to select from 
+        	System.out.println("");
         	System.out.println(YELLOW_TEXT + BLACK_BG + "|=========================================|");
 			System.out.println(YELLOW_TEXT + BLACK_BG + "|                                         |");
 			System.out.println(YELLOW_TEXT + BLACK_BG + "|      Customer Creation Menu             |");
@@ -278,10 +280,13 @@ public class Bank {
 			switch (userChoice) {
         		case 1:
         			createPersonalCustomer();
+        			pressAnyKey();
+        			manageCustomers();
         			break;
         		case 2: 
         			createCommercialCustomer();
         			pressAnyKey();
+        			manageCustomers();
         			break; 
         		case 3: 
         			pressAnyKey();
@@ -297,6 +302,7 @@ public class Bank {
 	public PersonalCustomer createPersonalCustomer() {
 		Scanner sc = new Scanner(System.in); 
 		
+		System.out.println("");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|=========================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                         |");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the name of the customer: |");
@@ -305,6 +311,7 @@ public class Bank {
 		System.out.println("" + RESET);
 		String name = sc.nextLine();
 		
+		System.out.println("");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|===============================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                               |");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the address for the customer:   |");
@@ -313,6 +320,7 @@ public class Bank {
 		System.out.println("" + RESET);
 		String address = sc.nextLine();
 		
+		System.out.println("");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the primary phone number for the customer:   |");
@@ -321,6 +329,7 @@ public class Bank {
 		System.out.println("" + RESET);
 		String phone = sc.nextLine();
 		
+		System.out.println("");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the home phone number for the customer:      |");
@@ -329,6 +338,7 @@ public class Bank {
 		System.out.println("" + RESET);
 		String homePhone = sc.nextLine();
 		
+		System.out.println("");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the work phone number for the customer:      |");
@@ -350,8 +360,6 @@ public class Bank {
 		System.out.println("" + RESET);
 		
 		System.out.println(customer);
-		
-		pressAnyKey();
 	    
 		return customer;
 	}
@@ -383,14 +391,14 @@ public class Bank {
 		System.out.println("" + RESET);
 		String phone = sc.nextLine();
 		
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the Credit Rating for the customer:          |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println("" + RESET);
-		int creditRating = sc.nextInt();
-		sc.nextLine();
+		String prompt = YELLOW_TEXT + BLACK_BG + "|============================================================|\n" +
+                "|                                                            |\n" +
+                "|  Please Enter the Credit Rating for the customer:          |\n" +
+                "|                                                            |\n" +
+                "|============================================================|\n" +
+                "" + RESET;
+	    int creditRating = InputValidator.getValidatedInteger(sc, prompt);
+	    sc.nextLine(); // Consume the newline character
 		
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|===============================================================|");
 		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                               |");
@@ -422,8 +430,6 @@ public class Bank {
 		System.out.println("" + RESET);
 		
 		System.out.println(customer);
-		
-		pressAnyKey();
 		
 		return customer;
 	}
@@ -493,6 +499,7 @@ public class Bank {
 		while (finished == false) {
 			
 			// Display a menu for the user to select from 
+			System.out.println("");
 			System.out.println(YELLOW_TEXT + BLACK_BG + "|=========================================|");
 			System.out.println(YELLOW_TEXT + BLACK_BG + "|                                         |");
 			System.out.println(YELLOW_TEXT + BLACK_BG + "|      Account Creation Menu              |");
@@ -545,32 +552,57 @@ public class Bank {
 	
 	public CheckingAccount createCheckingAccount(Customer customer) {
 		Scanner sc = new Scanner(System.in);
-
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the initial balance of the account:  |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
-	    System.out.println("" + RESET);
-	    double balance = sc.nextDouble();
+		CheckingAccount newCheckingAccount = new CheckingAccount();
+		double inputedBalance = 0.0;
+		
+		System.out.println("");
+		
+		while (inputedBalance < newCheckingAccount.getMinimumBalance()) {
+			String prompt = YELLOW_TEXT + BLACK_BG + "|====================================================|\n" +
+	                "|                                                    |\n" +
+	                "|  Please Enter the initial balance of the account   |\n" +
+	                "|                                                    |\n" +
+	                "|====================================================|\n" +
+	                "" + RESET;
+			inputedBalance = InputValidator.getValidatedDouble(sc, prompt);
+			if (inputedBalance < newCheckingAccount.getMinimumBalance()) {
+		    	System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+			    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + BLACK_BG + "|  A Checking Account requires a minimum balance     |");
+			    System.out.println(formatLine(RED_TEXT + BLACK_BG + "|           of:   $" + newCheckingAccount.getMinimumBalance() + " "));
+			    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+			    System.out.println("" + RESET);
+			    
+			    pressAnyKey();
+		    }
+		}
+	    double balance = inputedBalance;
 	    sc.nextLine(); // Consume the newline character
 
 	    Date date = new Date();
-
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|==========================================================|");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                          |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Select the bank branch this account belongs to:  |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                          |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|==========================================================|");
-	    System.out.println("" + RESET);
+	    
+	    System.out.println("");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Select the bank branch this account        |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  belongs to:                                       |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	    
 
 	    for (int i = 0; i < bankBranches.size(); i++) {
-	        System.out.println(YELLOW_TEXT + BLACK_BG + (i + 1) + ". " + bankBranches.get(i).getBranchName() + RESET);
+	    	System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(YELLOW_TEXT + BLACK_BG + "| " + (i + 1) + ". " + bankBranches.get(i).getBranchName() + " "));
+	        System.out.println(formatLine(YELLOW_TEXT + BLACK_BG + "|"));
+	        System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	        System.out.println("");
 	    }
 	    int branchChoice = sc.nextInt();
 	    sc.nextLine(); // Consume the newline character
 	    BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
-
+	    
+	    System.out.println("");
 	    System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
 	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
 	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the check style for the account:             |");
@@ -584,9 +616,30 @@ public class Bank {
 	    selectedBranch.addAccount(newAccount);
 	    customer.addAccount(newAccount);
 	    bankAccounts.add(newAccount);
-
-	    System.out.println(GREEN_TEXT + "New checking account created successfully!" + RESET);
+	    
+	    System.out.println("");
+	    System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|               Account Created successfully                 |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		System.out.println("");
+		
+		pressAnyKey();
+		
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the new account       |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		
+		pressAnyKey();
+		
 	    System.out.println(newAccount);
+	    
+	    pressAnyKey();
 
 	    return newAccount;
 	}
@@ -594,39 +647,43 @@ public class Bank {
 	public SavingsAccount createSavingsAccount(Customer customer) {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the initial balance of the account:  |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
-		System.out.println("" + RESET);
-		double balance = sc.nextDouble();
-		sc.nextLine(); // Consume the newline character
+		String prompt = YELLOW_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the initail balance of the account   |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double balance = InputValidator.getValidatedDouble(sc, prompt);
+	    sc.nextLine(); // Consume the newline character
 		
 		Date date = new Date();
 		
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|==========================================================|");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                          |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Select the bank branch this account belongs to:  |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                          |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|==========================================================|");
-		System.out.println("" + RESET);
+		System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the bank branch this account        |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  belongs to:                                       |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    
+
+	    for (int i = 0; i < bankBranches.size(); i++) {
+	    	System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "| " + (i + 1) + ". " + bankBranches.get(i).getBranchName() + " "));
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|"));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    }
+	    int branchChoice = sc.nextInt();
+	    sc.nextLine(); // Consume the newline character
+	    BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
 		
-		for (int i = 0; i < bankBranches.size(); i++) {
-			System.out.println(YELLOW_TEXT + BLACK_BG + (i + 1) + ". " + bankBranches.get(i).getBranchName() + RESET);
-		}
-		int branchChoice = sc.nextInt();
-		sc.nextLine(); // Consume the newline character
-		BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
-		
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the interest rate for the account:           |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println("" + RESET);
-		double interestRate = sc.nextDouble();
-		sc.nextLine();
+		String prompt2 = YELLOW_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the interest rate for the account    |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double interestRate = InputValidator.getValidatedDouble(sc, prompt2);
+	    sc.nextLine(); // Consume the newline character
 		
 		SavingsAccount newAccount = new SavingsAccount(balance, date, customer, selectedBranch, interestRate);
 		
@@ -634,8 +691,27 @@ public class Bank {
 		customer.addAccount(newAccount);
 		bankAccounts.add(newAccount);
 		
-		System.out.println(GREEN_TEXT + "New checking account created successfully!" + RESET);
-		System.out.println(newAccount);
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|               Account Created successfully                 |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		
+		pressAnyKey();
+		
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the new account       |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		
+		pressAnyKey();
+		
+	    System.out.println(newAccount);
+	    
+	    pressAnyKey();
 		
 		return newAccount;
 	}
@@ -695,12 +771,14 @@ public class Bank {
 			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
 			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
-			System.out.println(BLUE_TEXT + BLACK_BG + "|    Please Make a Selection (1-4):       |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|    Please Make a Selection (1-7):       |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "| 1. Create New Account                   |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "| 2. Display All Accounts                 |");
-			System.out.println(BLUE_TEXT + BLACK_BG + "| 3. Search For Customer                  |");
-			System.out.println(BLUE_TEXT + BLACK_BG + "| 4. Return to Main Menu                  |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 3. Search For Account                   |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 4. Make A Deposit or Withdrawal         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 5. Calculate Interest For Savings       |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 6. Return to Main Menu                  |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
 			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
 			System.out.println("" + RESET);
@@ -711,12 +789,12 @@ public class Bank {
 									
 			while (!validChoice) {
 				String userInput = scanner.nextLine();
-				if (userInput.matches("[1-4]")) {
+				if (userInput.matches("[1-6]")) {
 					userChoice = Integer.parseInt(userInput);
 					validChoice = true;
 				} 
 				else {
-					System.out.println("Invalid Input. Please enter a number between 1 and 4.");
+					System.out.println("Invalid Input. Please enter a number between 1 and 6.");
 				}
 			}
 			
@@ -729,10 +807,18 @@ public class Bank {
         			pressAnyKey();
         			break; 
         		case 3: 
-        			customerToSearchBy();
+        			searchForAccount();
         			pressAnyKey();
         			break;
         		case 4:
+        			searchForAccountForDep();
+        			pressAnyKey();
+        			break;
+        		case 5:
+        			manageInterestCalculation();
+        			mainMenu();
+        			break;
+        		case 6:
         			pressAnyKey();
         			mainMenu();
         			break;
@@ -860,53 +946,63 @@ public class Bank {
 	public SavingsAccount createSavingsAccount() {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the initial balance of the account:  |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
-		System.out.println("" + RESET);
-		double balance = sc.nextDouble();
-		sc.nextLine(); // Consume the newline character
+		String prompt = BLUE_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the initail balance of the account   |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double balance = InputValidator.getValidatedDouble(sc, prompt);
+	    sc.nextLine(); // Consume the newline character
 		
 		Date date = new Date();
 		
-		System.out.println(BLUE_TEXT + BLACK_BG + "|==========================================================|");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                          |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the bank branch this account belongs to:  |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                          |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|==========================================================|");
-		System.out.println("" + RESET);
-		
-		for (int i = 0; i < bankBranches.size(); i++) {
-			System.out.println(BLUE_TEXT + BLACK_BG + (i + 1) + ". " + bankBranches.get(i).getBranchName() + RESET);
-		}
-		int branchChoice = sc.nextInt();
-		sc.nextLine(); // Consume the newline character
-		BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
-		
-		System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the customer for this account:              |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println("" + RESET);
+		System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the bank branch this account        |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  belongs to:                                       |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    
+
+	    for (int i = 0; i < bankBranches.size(); i++) {
+	    	System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "| " + (i + 1) + ". " + bankBranches.get(i).getBranchName() + " "));
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|"));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    }
+	    int branchChoice = sc.nextInt();
+	    sc.nextLine(); // Consume the newline character
+	    BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
+	    
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the customer for this account:      |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    
 
 	    for (int i = 0; i < customers.size(); i++) {
-	        System.out.println(BLUE_TEXT + BLACK_BG + (i + 1) + ". " + customers.get(i).getName() + RESET);
+	    	System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "| " + (i + 1) + ". " + customers.get(i).getName() + " "));
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|"));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
 	    }
+	    
 	    int customerChoice = sc.nextInt();
 	    sc.nextLine(); // Consume the newline character
+	    System.out.println("" + RESET);
+	    
 	    Customer selectedCustomer = customers.get(customerChoice - 1);
 		
-		System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the interest rate for the account:           |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-		System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-		System.out.println("" + RESET);
-		double interestRate = sc.nextDouble();
-		sc.nextLine();
+	    String prompt2 = BLUE_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the interest rate for the account    |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double interestRate = InputValidator.getValidatedDouble(sc, prompt2);
+	    sc.nextLine(); // Consume the newline character
 		
 		SavingsAccount newAccount = new SavingsAccount(balance, date, selectedCustomer, selectedBranch, interestRate);
 		
@@ -923,53 +1019,99 @@ public class Bank {
 		System.out.println("");
 		System.out.println("");
 		
+		pressAnyKey();
+		
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the new account       |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		
+		pressAnyKey();
+		
 		System.out.println(newAccount);
+		
+		pressAnyKey();
 		
 		return newAccount;
 	}
 	
 	public CheckingAccount createCheckingAccount() {
 		Scanner sc = new Scanner(System.in);
-
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the initial balance of the account:  |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
-	    System.out.println("" + RESET);
-	    double balance = sc.nextDouble();
+		CheckingAccount newCheckingAccount = new CheckingAccount();
+		double inputedBalance = 0.0;
+		
+		System.out.println("");
+		
+		while (inputedBalance < newCheckingAccount.getMinimumBalance()) {
+			String prompt = BLUE_TEXT + BLACK_BG + "|====================================================|\n" +
+	                "|                                                    |\n" +
+	                "|  Please Enter the initial balance of the account   |\n" +
+	                "|                                                    |\n" +
+	                "|====================================================|\n" +
+	                "" + RESET;
+			inputedBalance = InputValidator.getValidatedDouble(sc, prompt);
+			if (inputedBalance < newCheckingAccount.getMinimumBalance()) {
+				System.out.println("");
+		    	System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+			    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + BLACK_BG + "|  A Checking Account requires a minimum balance     |");
+			    System.out.println(formatLine(RED_TEXT + BLACK_BG + "|           of:   $" + newCheckingAccount.getMinimumBalance() + " "));
+			    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+			    System.out.println("" + RESET);
+			    
+			    pressAnyKey();
+		    }
+		}
+	    double balance = inputedBalance;
 	    sc.nextLine(); // Consume the newline character
 
 	    Date date = new Date();
-
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|==========================================================|");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                          |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the bank branch this account belongs to:  |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                          |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|==========================================================|");
-	    System.out.println("" + RESET);
+	    
+	    System.out.println("");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the bank branch this account        |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  belongs to:                                       |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    
 
 	    for (int i = 0; i < bankBranches.size(); i++) {
-	        System.out.println(BLUE_TEXT + BLACK_BG + (i + 1) + ". " + bankBranches.get(i).getBranchName() + RESET);
+	    	System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "| " + (i + 1) + ". " + bankBranches.get(i).getBranchName() + " "));
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|"));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
 	    }
+	    
+	    System.out.println("");
 	    int branchChoice = sc.nextInt();
 	    sc.nextLine(); // Consume the newline character
 	    BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
 	    
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the customer for this account:              |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println("" + RESET);
+	    System.out.println("");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Select the customer for this account:      |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    
 
 	    for (int i = 0; i < customers.size(); i++) {
-	        System.out.println(BLUE_TEXT + BLACK_BG + (i + 1) + ". " + customers.get(i).getName() + RESET);
+	    	System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "| " + (i + 1) + ". " + customers.get(i).getName() + " "));
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|"));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
 	    }
+	    
+	    System.out.println("");
 	    int customerChoice = sc.nextInt();
 	    sc.nextLine(); // Consume the newline character
 	    Customer selectedCustomer = customers.get(customerChoice - 1);
-
+	    
+	    System.out.println("");
 	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
 	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
 	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the check style for the account:             |");
@@ -983,7 +1125,8 @@ public class Bank {
 	    selectedBranch.addAccount(newAccount);
 	    selectedCustomer.addAccount(newAccount);
 	    bankAccounts.add(newAccount);
-
+	    
+	    System.out.println("");
 	    System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
 		System.out.println(RED_TEXT + BLACK_BG + "|               Account Created successfully                 |");
@@ -991,10 +1134,1012 @@ public class Bank {
 		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println("");
 		System.out.println("");
+		
+		pressAnyKey();
+		
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the new account       |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
 		System.out.println("");
+		
+		pressAnyKey();
+		
 	    System.out.println(newAccount);
+	    
+	    pressAnyKey();
 
 	    return newAccount;
+	}
+	
+	public void searchForAccount() {
+		boolean finished = false;
+		int userChoice = 0;
+		
+		Scanner scanner = new Scanner(System.in); 
+		
+		while (finished == false) {
+			
+			// Display a menu for the user to select from 
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|          Account Search Menu            |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|  Do you want to search by customer      |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|  name or account number?                |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 1. Search by Account Number             |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 2. Search by Customer Name              |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 3. Return to Account Main Menu          |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println("" + RESET);
+			
+			// Loop until a valid choice is entered
+			// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+			boolean validChoice = false;
+			
+			while (!validChoice) {
+				String userInput = scanner.nextLine();
+				if (userInput.matches("[1-3]")) {
+					userChoice = Integer.parseInt(userInput);
+					validChoice = true;
+				} 
+				else {
+					System.out.println("Invalid Input. Please enter a number between 1 and 3.");
+				}
+			}
+			
+			switch (userChoice) {
+			case 1:
+				accNumberToSearchAccountBy();
+				pressAnyKey();
+				manageAccounts(); 
+                break;
+			case 2: 
+				customerToSearchAccountBy();
+				pressAnyKey();
+				manageAccounts(); 
+				break; 
+			case 3: 
+				pressAnyKey();
+				manageAccounts();
+				break;
+			default:
+				System.out.println("Invalid choice. Please select a valid option.");
+				break;
+			}
+		}
+	}
+	
+	public void customerToSearchAccountBy() {
+		Scanner sc = new Scanner(System.in);
+
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|  Please Enter the Customer Name to Search By       |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	    
+	    String name = sc.nextLine();
+	    searchForAccountByCustomer(name);
+	    
+	}
+	
+	public void accNumberToSearchAccountBy() {
+		Scanner sc = new Scanner(System.in);
+		
+		String prompt = BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the Account number to Search By      |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+		
+		int accNumber = InputValidator.getValidatedInteger(sc, prompt);
+		searchForAccountByAccNumber(accNumber);
+		
+	}
+	
+	public void searchForAccountByCustomer(String name) {
+		boolean found = false;
+	    
+	    for (Account account : bankAccounts) {
+	        if (account.getAccountOwner().getName().equalsIgnoreCase(name)) {
+	            if (!found) {
+	                // Print header only once when the first account is found
+	                System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	                System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	                System.out.println(PURPLE_TEXT + BLACK_BG + "|         Customer Accounts Found                    |");
+	                System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	                System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	                System.out.println("" + RESET);
+	                System.out.println("");
+	                found = true;
+	            }
+	            // Print account information
+	            System.out.println(account);
+	        }
+	    }
+	    
+	    if (!found) {
+	        System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	        System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(PURPLE_TEXT + BLACK_BG + "|         No Accounts Found for Customer             |");
+	        System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	        System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	        System.out.println("" + RESET);
+	        System.out.println("");
+	    }
+	}
+		
+	public void searchForAccountByAccNumber(int accNumber) {
+		for (Account account : bankAccounts) {
+			if (account.getAccountNumber() == accNumber) {
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|         	Customer Account was Found                |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println("" + RESET);
+				System.out.println("");
+					
+				System.out.println(account);
+				return;
+			}
+		}
+		
+		System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|      Customer Account was not Found                |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	    
+	    pressAnyKey();
+	    searchForAccount();
+	}
+	
+	public void searchForAccountForDep() {
+		boolean finished = false;
+		int userChoice = 0;
+		
+		Scanner scanner = new Scanner(System.in); 
+		
+		while (finished == false) {
+			
+			// Display a menu for the user to select from 
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|    Account Deposit & Withdrawal Menu    |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|  Do you have an account number or       |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|  customer name to access the account?   |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 1. Enter the Account Number             |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 2. Enter the Customer Name              |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "| 3. Return to Account Main Menu          |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println("" + RESET);
+			
+			// Loop until a valid choice is entered
+			// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+			boolean validChoice = false;
+			
+			while (!validChoice) {
+				String userInput = scanner.nextLine();
+				if (userInput.matches("[1-3]")) {
+					userChoice = Integer.parseInt(userInput);
+					validChoice = true;
+				} 
+				else {
+					System.out.println("Invalid Input. Please enter a number between 1 and 3.");
+				}
+			}
+			
+			switch (userChoice) {
+			case 1:
+				accNumberToSearchAccountByForDepOrWith();
+				pressAnyKey();
+				manageAccounts(); 
+                break;
+			case 2: 
+				customerToSearchAccountByForDepOrWith();
+				pressAnyKey();
+				manageAccounts(); 
+				break; 
+			case 3: 
+				pressAnyKey();
+				manageAccounts();
+				break;
+			default:
+				System.out.println("Invalid choice. Please select a valid option.");
+				break;
+			}
+		}
+	}
+	
+	public void customerToSearchAccountByForDepOrWith() {
+		Scanner sc = new Scanner(System.in);
+
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|  Please Enter the Customer Name to Search By       |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	    
+	    String name = sc.nextLine();
+	    AccNumberToMakeDepositOrWith(name);
+	    
+	}
+	
+	public void accNumberToSearchAccountByForDepOrWith() {
+		Scanner sc = new Scanner(System.in);
+		
+		
+		
+		String prompt = BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the Account number to Search By      |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+		int accNumber = InputValidator.getValidatedInteger(sc, prompt);
+		
+		accNumberToMakeDepositOrWith(accNumber);
+		
+	}
+	
+	public void accNumberToMakeDepositOrWith(int accNumber) {
+		for (Account account : bankAccounts) {
+			if (account.getAccountNumber() == accNumber) {
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|             Customer Account was Found             |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println("" + RESET);
+				System.out.println("");
+				
+				boolean finished = false;
+				int userChoice = 0;
+				
+				Scanner scanner = new Scanner(System.in); 
+				
+				while (finished == false) {
+					
+					// Display a menu for the user to select from 
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|    Account Deposit & Withdrawal Menu    |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|  Are You needing to make a Deposit      |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|  or Withdrawal for the account?         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "| 1. Make A Deposit                       |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "| 2. Make A Withdrawal                    |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "| 3. Return to Account Main Menu          |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+					System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+					System.out.println("" + RESET);
+					
+					// Loop until a valid choice is entered
+					// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+					boolean validChoice = false;
+					
+					while (!validChoice) {
+						String userInput = scanner.nextLine();
+						if (userInput.matches("[1-3]")) {
+							userChoice = Integer.parseInt(userInput);
+							validChoice = true;
+						} 
+						else {
+							System.out.println("Invalid Input. Please enter a number between 1 and 3.");
+						}
+					}
+					
+					switch (userChoice) {
+					case 1:
+						makeADeposit(account);
+						pressAnyKey();
+						manageAccounts(); 
+		                break;
+					case 2: 
+						makeAWithdrawal(account);
+						pressAnyKey();
+						manageAccounts(); 
+						break; 
+					case 3: 
+						pressAnyKey();
+						manageAccounts();
+						break;
+					default:
+						System.out.println("Invalid choice. Please select a valid option.");
+						break;
+					}
+				}
+			}
+		}
+		
+		System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|              Customer was not Found                |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	}
+	
+	public void AccNumberToMakeDepositOrWith(String name) {
+		boolean customerFound = false; 
+		ArrayList<Account> customerAccounts = new ArrayList<>();
+		
+		for (Account account : bankAccounts) {
+			if (account.getAccountOwner().getName().equalsIgnoreCase(name)) {
+				customerAccounts.add(account);
+				customerFound = true;
+			}
+		}
+		if (customerFound) {
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|             Customer Account was Found             |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println("" + RESET);
+			System.out.println("");
+			
+			boolean finished = false;
+			
+			Scanner scanner = new Scanner(System.in); 
+			
+			while (finished == false) {
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|          Select the account for the deposit        |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|          or Withdrawal                             |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+				System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+				
+				// Display all accounts for the customer
+	            for (int i = 0; i < customerAccounts.size(); i++) {
+	                System.out.println(formatLine(PURPLE_TEXT + BLACK_BG + "| " + (i + 1) + ". Account Number: " + customerAccounts.get(i).getAccountNumber() + " "));
+	            }
+	            System.out.println(formatLine(PURPLE_TEXT + BLACK_BG + "| " + (customerAccounts.size() + 1) + ". Return to Account Main Menu        "));
+	            System.out.println(formatLine(PURPLE_TEXT + BLACK_BG + "|"));
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	            System.out.println("" + RESET);
+	            
+	            int accountChoice = -1;
+	            boolean validChoice = false;
+
+	            while (!validChoice) {
+	                String userInput = scanner.nextLine();
+	                if (userInput.matches("[1-" + (customerAccounts.size() + 1) + "]")) {
+	                    accountChoice = Integer.parseInt(userInput) - 1;
+	                    validChoice = true;
+	                } else {
+	                    System.out.println("Invalid Input. Please enter a number between 1 and " + (customerAccounts.size() + 1) + ".");
+	                }
+	            }
+
+	            if (accountChoice == customerAccounts.size()) {
+	                finished = true;
+	                manageAccounts();
+	                break;
+	            }
+	            
+	            Account selectedAccount = customerAccounts.get(accountChoice);
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|     Selected Account Number: " + selectedAccount.getAccountNumber() + "             |");
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+	            System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+	            System.out.println("" + RESET);
+	            
+	            accountToMakeDepositOrWith(selectedAccount);
+
+			}
+		}
+		
+		System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|              Customer was not Found                |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	}
+	
+	public void accountToMakeDepositOrWith(Account account) {
+				
+		boolean finished = false;
+		int userChoice = 0;
+				
+		Scanner scanner = new Scanner(System.in); 
+				
+		while (finished == false) {
+					
+			// Display a menu for the user to select from 
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|    Account Deposit & Withdrawal Menu    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|  Are You needing to make a Deposit      |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|  or Withdrawal for the account?         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "| 1. Make A Deposit                       |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "| 2. Make A Withdrawal                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "| 3. Return to Account Main Menu          |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                         |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|=========================================|");
+			System.out.println("" + RESET);
+					
+			// Loop until a valid choice is entered
+			// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+			boolean validChoice = false;
+					
+			while (!validChoice) {
+				String userInput = scanner.nextLine();
+				if (userInput.matches("[1-3]")) {
+					userChoice = Integer.parseInt(userInput);
+					validChoice = true;
+				} 
+				else {
+					System.out.println("Invalid Input. Please enter a number between 1 and 3.");
+				}
+			}
+					
+			switch (userChoice) {
+			case 1:
+				makeADeposit(account);
+				pressAnyKey();
+				manageAccounts(); 
+		              break;
+			case 2: 
+				makeAWithdrawal(account);
+				manageAccounts(); 
+				break; 
+			case 3: 
+				pressAnyKey();
+				manageAccounts();
+				break;
+			default:
+				System.out.println("Invalid choice. Please select a valid option.");
+				break;
+			}
+		}
+	}
+
+	
+	public void makeADeposit(Account account) {
+		Scanner sc = new Scanner(System.in);
+		
+		String prompt = BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the amount of the deposit for the    |\n" +
+                "|  account:                                          |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double deposit = InputValidator.getValidatedDouble(sc, prompt);
+	    sc.nextLine(); // Consume the newline character
+		
+		account.makeDeposit(deposit);
+		
+		System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+		System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "|"));
+		System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "| New Balance for the account: $" + account.getBalance()));
+		System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "|"));
+		System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+		System.out.println("" + RESET);
+		
+		return;
+		
+	}
+	
+	public void makeAWithdrawal(Account account) {
+		Scanner sc = new Scanner(System.in);
+		
+		String prompt = BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|\n" +
+                "|                                                    |\n" +
+                "|  Please Enter the amount of the withdrawal for     |\n" +
+                "|  the account:                                      |\n" +
+                "|                                                    |\n" +
+                "|====================================================|\n" +
+                "" + RESET;
+	    double withdrawal = InputValidator.getValidatedDouble(sc, prompt);
+	    sc.nextLine(); // Consume the newline character
+		
+		double initialBalance = account.getBalance();
+		
+		account.makeWithdrawal(withdrawal);
+	
+		if (account.getBalance() < initialBalance) {
+			System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "|"));
+			System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "| New Balance for the account: $" + account.getBalance()));
+			System.out.println(formatLine(BRIGHTCYAN_TEXT + BLACK_BG + "|"));
+			System.out.println(BRIGHTCYAN_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println("" + RESET);
+			
+		}
+		else {
+			pressAnyKey();
+			accountToMakeDepositOrWith(account);
+		}
+		
+		return;
+		
+	}
+	
+	public void manageInterestCalculation() {
+		boolean finished = false;
+		int userChoice = 0;
+		
+		Scanner scanner = new Scanner(System.in); 
+		
+		while (finished == false) {
+			
+			// Display a menu for the user to select from 
+			System.out.println("");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|    Account Interest Calculation Menu    |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|  Do you have an account number or       |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|  customer name to access the account?   |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "| 1. Enter the Account Number             |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "| 2. Enter the Customer Name              |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "| 3. Return to Account Main Menu          |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println("" + RESET);
+			
+			// Loop until a valid choice is entered
+			// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+			boolean validChoice = false;
+			
+			while (!validChoice) {
+				String userInput = scanner.nextLine();
+				if (userInput.matches("[1-3]")) {
+					userChoice = Integer.parseInt(userInput);
+					validChoice = true;
+				} 
+				else {
+					System.out.println("Invalid Input. Please enter a number between 1 and 3.");
+				}
+			}
+			
+			switch (userChoice) {
+			case 1:
+				accNumberForInteresr();
+				pressAnyKey();
+				manageAccounts(); 
+                break;
+			case 2: 
+				nameforInterestCalcualtion();
+				pressAnyKey();
+				manageAccounts(); 
+				break; 
+			case 3: 
+				pressAnyKey();
+				manageAccounts();
+				break;
+			default:
+				System.out.println("Invalid choice. Please select a valid option.");
+				break;
+			}
+		}
+		
+	}
+	
+	public void accNumberForInteresr() {
+		Scanner sc = new Scanner(System.in);
+		
+		String prompt = BLUE_TEXT + WHITE_BG + "|====================================================|\n" +
+                							   "|                                                    |\n" +
+                							   "|  Please Enter the Account number to Search By      |\n" +
+                							   "|                                                    |\n" +
+                							   "|====================================================|\n" +
+                							   "" + RESET;
+		
+		int accNumber = InputValidator.getValidatedInteger(sc, prompt);
+		
+		interestCalculation(accNumber);
+	}
+	
+	public void interestCalculation(int accountNumber) {
+		
+		boolean accountFound = false;
+		double interestAmount = 0.0;
+		
+		for (Account account : bankAccounts) {
+			if (account.getAccountNumber() == accountNumber) {
+				accountFound = true; 
+				System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+				System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+				System.out.println(BLUE_TEXT + WHITE_BG + "|              Customer Account was Found            |");
+				System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+				System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+				System.out.println("" + RESET);
+				System.out.println("");
+				
+				if (account instanceof SavingsAccount) {
+					SavingsAccount savingsAccount = (SavingsAccount) account;
+					interestAmount = savingsAccount.calculateInterest(); 
+					
+					System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+			        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+			        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  For the Account Number: " + savingsAccount.getAccountNumber() + " "));
+			        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  Belonging to " + savingsAccount.getAccountOwner().getName() +  " "));
+			        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  With a current Balanance of: $" + savingsAccount.getBalance() +  " "));
+			        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  The Interest Amount earned would be: "));
+			        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|               $" + String.format("%.2f", interestAmount) + " "));
+			        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+			        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+			        System.out.println("" + RESET);
+			        System.out.println("");
+			      
+			        return; 
+				}
+				else {
+	                System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	                System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	                System.out.println(RED_TEXT + WHITE_BG + "|     The account is not a Savings Account.          |");
+	                System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	                System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	                System.out.println("" + RESET);
+	                
+	                pressAnyKey();
+	                manageInterestCalculation();
+	                return;
+	            }
+			}
+			
+		}
+		if (!accountFound) {
+	        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(RED_TEXT + WHITE_BG + "|          Customer Account was Not Found            |");
+	        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println("" + RESET);
+	        
+	        pressAnyKey();
+	        manageInterestCalculation(); 
+		} 
+	}
+	
+	public void nameforInterestCalcualtion() {
+		Scanner sc = new Scanner(System.in);
+
+	    System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + WHITE_BG + "|  Please Enter the Customer Name to Search By       |");
+	    System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+	    
+	    String name = sc.nextLine();
+	    
+	    findAccountsForInterest(name);
+	    sc.close();
+	}
+	
+	public void findAccountsForInterest(String name) {
+		boolean customerFound = false; 
+		ArrayList<Account> accountsForInterest = new ArrayList<>();
+		
+		for (Account account : bankAccounts) {
+			if (account.getAccountOwner().getName().equalsIgnoreCase(name)) {
+				customerFound = true;
+				accountsForInterest.add(account);
+			}
+		}
+	    
+	    if (customerFound) {
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|             Customer Account(s) Found              |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println("" + RESET);
+	        System.out.println(""); 
+	        
+	        selectionOfAccount(accountsForInterest);
+	    } 
+	    else {
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|              Customer was not Found                |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println("" + RESET);
+	        
+	        pressAnyKey();
+	        manageInterestCalculation();
+	    }
+	}
+	
+	public void selectionOfAccount(ArrayList<Account> accountsForInterest) {
+		
+		ArrayList<SavingsAccount> savingsAccountsForInterest = new ArrayList<>();
+		
+		boolean finished = false;
+		
+		Scanner scanner = new Scanner(System.in); 
+		
+		for (Account account : accountsForInterest) {
+			if (account instanceof SavingsAccount) {
+				SavingsAccount savingsAccount = (SavingsAccount) account; 
+				savingsAccountsForInterest.add(savingsAccount);	
+			}		
+		} 
+		
+		if (savingsAccountsForInterest.isEmpty()) {
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|       No Savings Accounts found for the customer   |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+	        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+	        System.out.println("" + RESET);
+	        scanner.close();
+	        return;
+	    }
+			
+		while (!finished) {
+			System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|          Select the savings account to calculate   |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|          interest for:                             |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+			System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+			
+			for (int i = 0; i < savingsAccountsForInterest.size(); i++) {
+                System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "| " + (i + 1) + ". Account Number: " + savingsAccountsForInterest.get(i).getAccountNumber() + " "));
+            }
+            System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "| " + (savingsAccountsForInterest.size() + 1) + ". Return to Account Main Menu        "));
+            System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|"));
+            System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+            System.out.println("" + RESET);
+            
+            int accountChoice = -1;
+            boolean validChoice = false;
+            
+            while (!validChoice) {
+                String userInput = scanner.nextLine();
+                if (userInput.matches("[1-" + (savingsAccountsForInterest.size() + 1) + "]")) {
+                    accountChoice = Integer.parseInt(userInput) - 1;
+                    validChoice = true;
+                } else {
+                    System.out.println("Invalid Input. Please enter a number between 1 and " + (savingsAccountsForInterest.size() + 1) + ".");
+                }
+            }
+            
+            if (accountChoice == savingsAccountsForInterest.size()) {
+                finished = true;
+                manageAccounts();
+                break;
+            }
+            SavingsAccount selectedAccount = savingsAccountsForInterest.get(accountChoice);
+            
+            calculationOfInterest(selectedAccount);
+		}
+		scanner.close();
+	}
+	
+	public void calculationOfInterest(SavingsAccount account) {
+		
+		double interestAmount = account.calculateInterest();
+		
+		System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  For the Account Number: " + account.getAccountNumber() + " "));
+        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  Belonging to " + account.getAccountOwner().getName() +  " "));
+        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  With a current Balanance of: $" + account.getBalance() +  " "));
+        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|  The Interest Amount earned would be: "));
+        System.out.println(formatLine(BLUE_TEXT + WHITE_BG + "|               $" + String.format("%.2f", interestAmount) + " "));
+        System.out.println(BLUE_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(BLUE_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println("" + RESET);
+        System.out.println("");
+        
+        pressAnyKey(); 
+        manageAccounts(); 
+	}
+	
+	public void manageBankBranches() {
+		
+		boolean finished = false;
+		int userChoice = 0;
+		
+		Scanner scanner = new Scanner(System.in); 
+		
+        while (finished == false) {
+        	
+        	// Display a menu for the user to select from 
+        	System.out.println(RED_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println(RED_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(RED_TEXT + WHITE_BG + "|       Bank Branch Mangement Menu        |");
+			System.out.println(RED_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(RED_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println(RED_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(RED_TEXT + WHITE_BG + "|    Please Make a Selection (1-4):       |");
+			System.out.println(RED_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(RED_TEXT + WHITE_BG + "| 1. Create New Branch                    |");
+			System.out.println(RED_TEXT + WHITE_BG + "| 2. Display All Branches                 |");
+			System.out.println(RED_TEXT + WHITE_BG + "| 3. Search For A Branch                  |");
+			System.out.println(RED_TEXT + WHITE_BG + "| 4. Return to Main Menu                  |");
+			System.out.println(RED_TEXT + WHITE_BG + "|                                         |");
+			System.out.println(RED_TEXT + WHITE_BG + "|=========================================|");
+			System.out.println("" + RESET);
+			
+			// Loop until a valid choice is entered
+			// the loop will handle if the user was to enter anything other than a integer such as b/, so that it does not break the program and cause you to start over
+			boolean validChoice = false;
+									
+			while (!validChoice) {
+				String userInput = scanner.nextLine();
+				if (userInput.matches("[1-4]")) {
+					userChoice = Integer.parseInt(userInput);
+					validChoice = true;
+				} 
+				else {
+					System.out.println("Invalid Input. Please enter a number between 1 and 4.");
+				}
+			}
+			
+			switch (userChoice) {
+        		case 1:
+        			createNewBankBranch();
+        			break;
+        		case 2: 
+        			displayBankBranches();
+        			pressAnyKey();
+        			break; 
+        		case 3: 
+        			enterNameForBranch();
+        			pressAnyKey();
+        			break;
+        		case 4:
+        			pressAnyKey();
+        			mainMenu();
+        			break;
+        		default:
+        			System.out.println("Invalid choice. Please select a valid option.");
+        			break;
+			}
+        }
+	}
+	
+	public BankBranch createNewBankBranch() {
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("");
+		System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|   Congratulations on the opening of a new Quantum  |");
+        System.out.println(RED_TEXT + WHITE_BG + "|   Realms Bank Branch                               |");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println("" + RESET);
+        
+        System.out.println("");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|   Please Enter the Name of the new Branch          |");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println("");
+        
+        String branchName = sc.nextLine();
+        
+        System.out.println("");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|   Please Enter the address for the new Branch      |");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println("");
+        
+        String address = sc.nextLine();
+        
+        BankBranch newBranch = new BankBranch(branchName, address); 
+        bankBranches.add(newBranch);
+        
+        System.out.println("");
+	    System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|           Bank Branch Created successfully                 |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		System.out.println("");
+		
+		pressAnyKey();
+		
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the new Branch        |");
+		System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+		System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+		System.out.println("");
+		
+		pressAnyKey();
+		
+	    System.out.println(newBranch);
+	    
+	    pressAnyKey();
+	    
+	    return newBranch;       
+	}
+	
+	public void enterNameForBranch() {
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println("");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|   Please Enter the Name for the Branch             |");
+        System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+        System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+        System.out.println("");
+        
+        String name = sc.nextLine();
+        
+        findBranch(name);
+	}
+	
+	public void findBranch(String name) {
+		for (BankBranch branch : bankBranches) {
+			if (branch.getBranchName().equalsIgnoreCase(name)) {
+				System.out.println("");
+				System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+			    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + WHITE_BG + "|            The Bank Branch was Found               |");
+			    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+			    System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+			    System.out.println("" + RESET);
+			    System.out.println("");
+			    
+			    pressAnyKey();
+				
+				System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+				System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+				System.out.println(RED_TEXT + BLACK_BG + "|          Here is the information for the Branch            |");
+				System.out.println(RED_TEXT + BLACK_BG + "|                                                            |");
+				System.out.println(RED_TEXT + BLACK_BG + "|============================================================|");
+				System.out.println("");
+				
+				pressAnyKey();
+				
+			    System.out.println(branch);
+			    
+			    return;
+			}
+		}
+		System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|              Branch was not Found                  |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
 	}
 	
 	public void displayCustomers() {
@@ -1025,5 +2170,10 @@ public class Bank {
 		
 		System.out.println("Please Press any key to continue");
 		sc.nextLine();
+	}
+    
+    private String formatLine(String content) {
+	    int LINE_WIDTH = 62; // Adjust the width as needed
+	    return String.format("%-" + LINE_WIDTH + "s |", content);
 	}
 }

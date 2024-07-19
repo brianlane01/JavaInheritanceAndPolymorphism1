@@ -17,9 +17,10 @@ public class Account {
 	
 	private BankBranch branchName;
 	
-	String BLUE_TEXT = "\u001B[34m";
-	String BLACK_BG = "\u001B[40m";
-	String RESET = "\u001B[0m";
+	final String BLUE_TEXT = "\u001B[34m";
+	final String PURPLE_TEXT = "\u001B[35m";
+	final String BLACK_BG = "\u001B[40m";
+	final String RESET = "\u001B[0m";
 	
 	public Account( ) {
 		this.accountNumber = 0; 
@@ -122,18 +123,41 @@ public class Account {
 		this.branchName = branchName;
 	}
 	
-	public void makeDeposit(double amount) {
-		 balance += amount; 
-	}
-	
-	public void makeWithdrawal(double amount ) {
-		if(balance >= amount) {
-			balance -= amount; 
-		}
-		else {
-			System.out.println("Insufficient funds to meet withdrawal amount of $" + amount);
-		}
-	}
+	 /**
+     * Description: Withdraws a specified amount from the account balance. If the amount is less than or equal to the balance, 
+     * it deducts the amount from the balance; otherwise, it prints "Insufficient balance"
+     * @param amount The amount to withdraw
+     * 
+     */
+    public void makeWithdrawal(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+        } else {
+            System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|    The selected account currently does not have    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|    enough funds to cover the withdrawal amount.    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|    The current balance of the account is:          |");
+			System.out.println(formatLineWithdrawal(PURPLE_TEXT + BLACK_BG + "|    $" + balance + " "));
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|                                                    |");
+			System.out.println(PURPLE_TEXT + BLACK_BG + "|====================================================|");
+			System.out.println("" + RESET);
+			System.out.println("");
+        }
+    }
+
+    
+    /**
+     * Description: Deposits a specified amount to the account balance. If the amount is greater than 0, it adds the amount to the balance
+     * @param amount The amount to deposit
+     * 
+     */
+    public void makeDeposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
 	
 	@Override
     public String toString() {
@@ -204,5 +228,9 @@ public class Account {
 	private String formatLine(String content) {
 	    int LINE_WIDTH = 47; // Adjust the width as needed
 	    return String.format("%-" + LINE_WIDTH + "s |", content);
+	}
+	private String formatLineWithdrawal(String content) {
+		int LINE_WIDTH = 62; // Adjust the width as needed
+		return String.format("%-" + LINE_WIDTH + "s |", content);
 	}
 }

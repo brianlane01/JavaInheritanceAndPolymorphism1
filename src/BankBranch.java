@@ -89,12 +89,28 @@ public class BankBranch {
         output.append(formatLine("|                                          "));
 	    output.append("\n");
 	    output.append("|--------------------------------------------------------------------|\n");
+	    output.append(formatLine("|                                          "));
 	    output.append("\n");
-
-        for (Account account : branchAccounts) {
-            output.append(account.toString()).append("\n");
-        }
-
+	    output.append(formatLine("|   These are the Bank Accounts at this location "));
+	    output.append("\n");
+	    output.append(formatLine("|           "));
+	    output.append("\n");
+	    
+	    if (branchAccounts.isEmpty()) {
+	    	output.append("|--------------------------------------------------------------------|\n");
+		    output.append(formatLine("|                                          "));
+		    output.append("\n");
+		    output.append(formatLine("| There are no Bank Accounts at this location currently "));
+		    output.append("\n");
+		    output.append(formatLine("|           "));
+		    output.append("\n");
+		    output.append("|--------------------------------------------------------------------|\n");
+	    }
+	    else {
+	    	for (Account account : branchAccounts) {
+	    		output.append(account.toString()).append("\n");
+        	}
+	    }
         output.append(RESET);
         return output.toString();
     }
