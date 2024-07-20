@@ -132,38 +132,52 @@ public class Customer {
 	    output.append("|-----------------------------------------------|");
 	    output.append("\n");
 	    
-	    for (Account account : customerAccounts) {
-	    	output.append("|                                               |");
+	    if (customerAccounts.isEmpty()) {
+	    	output.append("|-----------------------------------------------|\n");
+		    output.append(formatLine("|                                          "));
 		    output.append("\n");
-	        output.append(formatLine("|    Account Number: " + account.getAccountNumber()));
-	        output.append("\n");
-	        output.append(formatLine("|    Balance: $" + String.format("%.2f", account.getBalance())));
-	        output.append("\n");
-	        output.append(formatLine("|    Date Opened: " + account.getDateOpened()));
-	        output.append("\n");
-	        output.append(formatLine("|    Branch: " + (account.getBranchName() != null ? account.getBranchName().getBranchName() : "N/A")));
-	        output.append("\n");
+		    output.append(formatLine("| There are no Bank Accounts for this  "));
+		    output.append("\n");
+		    output.append(formatLine("| customer          "));
+		    output.append("\n");
+		    output.append(formatLine("|           "));
+		    output.append("\n");
+		    output.append("|-----------------------------------------------|\n");
+	    }
+	    else {
+	    	for (Account account : customerAccounts) {
+	    		output.append("|                                               |");
+	    		output.append("\n");
+	    		output.append(formatLine("|    Account Number: " + account.getAccountNumber()));
+	    		output.append("\n");
+	    		output.append(formatLine("|    Balance: $" + String.format("%.2f", account.getBalance())));
+	    		output.append("\n");
+	    		output.append(formatLine("|    Date Opened: " + account.getDateOpened()));
+	    		output.append("\n");
+	    		output.append(formatLine("|    Branch: " + (account.getBranchName() != null ? account.getBranchName().getBranchName() : "N/A")));
+	    		output.append("\n");
 
-	        if (account instanceof SavingsAccount) {
-	            SavingsAccount savings = (SavingsAccount) account;
-	            output.append(formatLine("|    Type of Account: " + savings.getTypeOfAccount()));
-	            output.append("\n");
-	            output.append(formatLine("|    Interest Rate: " + String.format("%.2f%%", savings.getInterestRate())));
-	            output.append("\n");
-	        } else if (account instanceof CheckingAccount) {
-	            CheckingAccount checking = (CheckingAccount) account;
-	            output.append(formatLine("|    Type of Account: " + checking.getTypeOfAccount()));
-	            output.append("\n");
-	            output.append(formatLine("|    Check Style: " + checking.getCheckStyle()));
-	            output.append("\n");
-	            output.append(formatLine("|    Minimum Balance: $" + String.format("%.2f", (double) checking.getMinimumBalance())));
-	            output.append("\n");
+	        	if (account instanceof SavingsAccount) {
+	        		SavingsAccount savings = (SavingsAccount) account;
+	        		output.append(formatLine("|    Type of Account: " + savings.getTypeOfAccount()));
+	        		output.append("\n");
+	        		output.append(formatLine("|    Interest Rate: " + String.format("%.2f%%", savings.getInterestRate())));
+	        		output.append("\n");
+	        	} else if (account instanceof CheckingAccount) {
+	        		CheckingAccount checking = (CheckingAccount) account;
+	        		output.append(formatLine("|    Type of Account: " + checking.getTypeOfAccount()));
+	        		output.append("\n");
+	        		output.append(formatLine("|    Check Style: " + checking.getCheckStyle()));
+	        		output.append("\n");
+	        		output.append(formatLine("|    Minimum Balance: $" + String.format("%.2f", (double) checking.getMinimumBalance())));
+	        		output.append("\n");
 	            
-	        }
-	        output.append(formatLine("|                                              "));
-	        output.append("\n");
-	        output.append("|-----------------------------------------------|");
-	        output.append("\n");
+	        	}
+	        	output.append(formatLine("|                                              "));
+	        	output.append("\n");
+	        	output.append("|-----------------------------------------------|");
+	        	output.append("\n");
+	    	}
 	    }
 	    
 	    output.append(RESET); // Reset to default formatting

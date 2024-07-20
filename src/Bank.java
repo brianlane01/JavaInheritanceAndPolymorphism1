@@ -39,13 +39,13 @@ public class Bank {
 		PersonalCustomer customer6 = new PersonalCustomer("Clark Kent", "1234 Smallville Road", "555-690-6789", "555-178-4567", "555-909-5678");
 		PersonalCustomer customer7 = new PersonalCustomer("Peter Parker", "20 Ingram Street", "555-600-6789", "555-000-4567", "555-000-5678");
 		
-		CheckingAccount account1 = new CheckingAccount(1573.75, new Date(), customer1, branch4, "Eco-Friendly");
-		CheckingAccount account2 = new CheckingAccount(573.75, new Date(), customer2, branch5, "Eco-Friendly");
-		CheckingAccount account3 = new CheckingAccount(59559898873.75, new Date(), customer3, branch2, "Fantasy and Sci-Fi");
-		CheckingAccount account4 = new CheckingAccount(595899898873.75, new Date(), customer4, branch7, "Inspirational Quotes");
-		CheckingAccount account5 = new CheckingAccount(898873.75, new Date(), customer5, branch1, "Nature Inspired");
-		CheckingAccount account6 = new CheckingAccount(898873.75, new Date(), customer6, branch3, "Modern Minimalist");
-		CheckingAccount account7 = new CheckingAccount(873.75, new Date(), customer7, branch1, "Animal Lovers");
+		CheckingAccount account1 = new CheckingAccount(1573.75, new Date(), customer1, branch4, CheckStyle.ANIMAL_LOVERS);
+		CheckingAccount account2 = new CheckingAccount(573.75, new Date(), customer2, branch5, CheckStyle.ECO_FRIENDDLY);
+		CheckingAccount account3 = new CheckingAccount(59559898873.75, new Date(), customer3, branch2, CheckStyle.INSPIRATIONAL_QUOTES);
+		CheckingAccount account4 = new CheckingAccount(595899898873.75, new Date(), customer4, branch7, CheckStyle.NATURE_INSPIRED);
+		CheckingAccount account5 = new CheckingAccount(898873.75, new Date(), customer5, branch1, CheckStyle.FANTASTY_AND_SCIFI);
+		CheckingAccount account6 = new CheckingAccount(898873.75, new Date(), customer6, branch3, CheckStyle.CLASSIC);
+		CheckingAccount account7 = new CheckingAccount(873.75, new Date(), customer7, branch1, CheckStyle.MONDERN_MINIMALIST);
 		SavingsAccount account8 = new SavingsAccount(100.00, new Date(), customer1, branch4, 10);
 		SavingsAccount account9 = new SavingsAccount(5890.00, new Date(), customer2, branch5, 5.8);
 		SavingsAccount account10 = new SavingsAccount(345587757890.00, new Date(), customer3, branch2, 8.3);
@@ -596,22 +596,30 @@ public class Bank {
 	        System.out.println(formatLine(YELLOW_TEXT + BLACK_BG + "| " + (i + 1) + ". " + bankBranches.get(i).getBranchName() + " "));
 	        System.out.println(formatLine(YELLOW_TEXT + BLACK_BG + "|"));
 	        System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
-	        System.out.println("");
 	    }
 	    int branchChoice = sc.nextInt();
 	    sc.nextLine(); // Consume the newline character
 	    BankBranch selectedBranch = bankBranches.get(branchChoice - 1);
 	    
 	    System.out.println("");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Enter the check style for the account:             |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(YELLOW_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println("" + RESET);
-	    String checkStyle = sc.nextLine();
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|  Please Select the check style for the account:    |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    
+	    for (CheckStyle style : CheckStyle.values()) {
+	        System.out.println(formatLine(YELLOW_TEXT + BLACK_BG + "|  " + (style.ordinal() + 1) + ". " + style + " "));
+	        System.out.println(YELLOW_TEXT + BLACK_BG + "|                                                    |");
+	    }
+	    
+	    System.out.println(YELLOW_TEXT + BLACK_BG + "|====================================================|");
+	    int checkStyleChoice = sc.nextInt();
+	    sc.nextLine(); // Consume the newline character
+	    CheckStyle selectedCheckStyle = CheckStyle.values()[checkStyleChoice - 1];
 
-	    CheckingAccount newAccount = new CheckingAccount(balance, date, customer, selectedBranch, checkStyle);
+	    CheckingAccount newAccount = new CheckingAccount(balance, date, customer, selectedBranch, selectedCheckStyle);
 
 	    selectedBranch.addAccount(newAccount);
 	    customer.addAccount(newAccount);
@@ -1112,15 +1120,24 @@ public class Bank {
 	    Customer selectedCustomer = customers.get(customerChoice - 1);
 	    
 	    System.out.println("");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the check style for the account:             |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                            |");
-	    System.out.println(BLUE_TEXT + BLACK_BG + "|============================================================|");
-	    System.out.println("" + RESET);
-	    String checkStyle = sc.nextLine();
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|  Please Enter the check style for the account:     |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    
+	    for (CheckStyle style : CheckStyle.values()) {
+	        System.out.println(formatLine(BLUE_TEXT + BLACK_BG + "|  " + (style.ordinal() + 1) + ". " + style + " "));
+	        System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    }
+	    
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    int checkStyleChoice = sc.nextInt();
+	    sc.nextLine(); // Consume the newline character
+	    CheckStyle selectedCheckStyle = CheckStyle.values()[checkStyleChoice - 1];
 
-	    CheckingAccount newAccount = new CheckingAccount(balance, date, selectedCustomer, selectedBranch, checkStyle);
+	    CheckingAccount newAccount = new CheckingAccount(balance, date, selectedCustomer, selectedBranch, selectedCheckStyle);
 
 	    selectedBranch.addAccount(newAccount);
 	    selectedCustomer.addAccount(newAccount);
@@ -2143,32 +2160,97 @@ public class Bank {
 	}
 	
 	public void displayCustomers() {
-		System.out.println("\nDisplaying All Customers:");
-        System.out.println("====================\n");
+		System.out.println(GREEN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "| These are the current Customers at Quantum         |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "| Realms Bank.                                       |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "| The System will display one customer at a time.    |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "| Press the Enter Key to display the next Customer.  |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(GREEN_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("");
+	    
+	    pressAnyKey();
+	    
         for (Customer customer : customers) {
             System.out.println(customer);
+            pressAnyKey();
         }
+        
+        System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "| There are no more customers for Quantum Realms     |");
+	    System.out.println(RED_TEXT + BLACK_BG + "| Bank                                               |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
 	}
         
     public void displayAccounts() {
-        	System.out.println("\nDisplaying All Accounts:");
-        	System.out.println("====================\n");
-        	for (Account account : bankAccounts) {
-        		System.out.println(account);
-        	}
+    	System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "| These are the current Accounts at Quantum          |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "| Realms Bank.                                       |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "| The System will display one account at a time.     |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "| Press the Enter Key to display the next Account.   |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(BLUE_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("");
+	    
+	    pressAnyKey();
+	    
+        for (Account account : bankAccounts) {
+        	System.out.println(account);
+        	pressAnyKey();
+        }
+        
+        System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "| There are no more accounts for Quantum Realms      |");
+	    System.out.println(RED_TEXT + BLACK_BG + "| Bank                                               |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + BLACK_BG + "|====================================================|");
+	    System.out.println("" + RESET);
     }
+    
     public void displayBankBranches() {
-    	System.out.println("\nDisplaying All Banks:");
-    	System.out.println("====================\n");
+    	System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| These are the current Branches for Quantum         |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| Realms Bank.                                       |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| The System will display one branch at a time.      |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| Press the Enter Key to display the next Branch.    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println("");
+	    
+	    pressAnyKey();
+	    
     	for (BankBranch branch : bankBranches) {
     		System.out.println(branch);
+    		pressAnyKey();
     	}
+    	
+    	System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| There are no more Branches for Quantum Realms      |");
+	    System.out.println(RED_TEXT + WHITE_BG + "| Bank                                               |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|                                                    |");
+	    System.out.println(RED_TEXT + WHITE_BG + "|====================================================|");
+	    System.out.println("" + RESET);
+    	
     }
     
     public void pressAnyKey() {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("Please Press any key to continue");
+		System.out.println("Please Press the Enter key to continue");
 		sc.nextLine();
 	}
     

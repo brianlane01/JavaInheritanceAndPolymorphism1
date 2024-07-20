@@ -4,14 +4,14 @@ public class CheckingAccount extends Account {
 	
 	private String typeOfAccount; 
 	
-	private String checkStyle;
+	private CheckStyle checkStyle;
 	
 	private int minimumBalance; 
 	
 	public CheckingAccount() {
 		super();
 		this.typeOfAccount = "CHECKING";
-		this.checkStyle = "";
+		this.checkStyle = CheckStyle.CLASSIC;
 		this.minimumBalance = 500;
 	}
 
@@ -21,7 +21,7 @@ public class CheckingAccount extends Account {
 	 * @param accountOwner
 	 * @param branchName
 	 */
-	public CheckingAccount(double balance, Date dateOpened, Customer accountOwner, BankBranch branchName, String checkStyle) {
+	public CheckingAccount(double balance, Date dateOpened, Customer accountOwner, BankBranch branchName, CheckStyle checkStyle) {
 		super(balance, dateOpened, accountOwner, branchName);
 		this.typeOfAccount = "CHECKING";
 		this.checkStyle = checkStyle;
@@ -38,7 +38,7 @@ public class CheckingAccount extends Account {
 	/**
 	 * @return the checkStyle
 	 */
-	public String getCheckStyle() {
+	public CheckStyle getCheckStyle() {
 		return checkStyle;
 	}
 
@@ -59,7 +59,7 @@ public class CheckingAccount extends Account {
 	/**
 	 * @param checkStyle the checkStyle to set
 	 */
-	public void setCheckStyle(String checkStyle) {
+	public void setCheckStyle(CheckStyle checkStyle) {
 		this.checkStyle = checkStyle;
 	}
 

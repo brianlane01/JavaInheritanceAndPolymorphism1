@@ -74,7 +74,7 @@ public class BankBranch {
         output.append("|--------------------------------------------------------------------|\n");
         output.append(formatLine("|                                          "));
 	    output.append("\n");
-	    output.append(formatLine("|           Branch Information"));
+	    output.append(formatLine("|                          Branch Information"));
 	    output.append("\n");
 	    output.append(formatLine("|                                          "));
 	    output.append("\n");
